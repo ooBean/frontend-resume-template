@@ -1,11 +1,13 @@
 import { Mail, Phone, Github, Briefcase, Award, GraduationCap, Folder, Target, Download } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { useLanguageStore, languageMap, Language } from "./store/languageStore";
 
 export default function App() {
   const resumeRef = useRef<HTMLDivElement>(null);
-  const [isSimplified, setIsSimplified] = useState(false); // 添加状态管理，false表示繁体，true表示简体
+  const { language, toggleLanguage } = useLanguageStore();
+  const t = languageMap[language as Language];
 
   const handleDownloadPDF = async () => {
     if (!resumeRef.current) return;
@@ -89,7 +91,7 @@ export default function App() {
           style={{ backgroundColor: 'rgb(30, 41, 59)', color: 'white' }}
         >
           <Download className="w-4 h-4" />
-          <span>打印/下载PDF</span>
+          <span>{t.downloadPDF}</span>
         </button>
         <button
           onClick={handleDownloadPDF}
@@ -97,14 +99,14 @@ export default function App() {
           style={{ backgroundColor: 'rgb(75, 85, 99)', color: 'white' }}
         >
           <Download className="w-3 h-3" />
-          <span>备选方式</span>
+          <span>{t.alternativeDownload}</span>
         </button>
         <button
-          onClick={() => setIsSimplified(!isSimplified)}
+          onClick={toggleLanguage}
           className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-500 transition-colors text-sm"
           style={{ backgroundColor: 'rgb(37, 99, 235)', color: 'white' }}
         >
-          <span>{isSimplified ? '切换到繁体' : '切换到简体'}</span>
+          <span>{t.languageToggle}</span>
         </button>
       </div>
 
@@ -115,8 +117,8 @@ export default function App() {
             <div className="h-full flex flex-col">
               {/* Header Section */}
               <div className="px-12 py-8 border-b border-slate-200">
-                <h1 className="text-4xl mb-2 text-slate-900">王宇皎</h1>
-                <p className="text-xl text-slate-600 mb-2">{isSimplified ? '前端开发工程师' : '前端開發工程師'}</p>
+                <h1 className="text-4xl mb-2 text-slate-900">{t.name}</h1>
+                <p className="text-xl text-slate-600 mb-2">{t.pageTitle}</p>
 
                 <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm text-slate-600">
                   <div className="flex items-center gap-2">
@@ -140,14 +142,11 @@ export default function App() {
                 <div className="mb-8">
                   <div className="flex items-center gap-3 mb-3">
                     <Target className="w-5 h-5 text-slate-700" />
-                    <h2 className="text-lg text-slate-800 uppercase tracking-wide">{isSimplified ? '专业简介' : '專業簡介'}</h2>
+                    <h2 className="text-lg text-slate-800 uppercase tracking-wide">{t.professionalSummary}</h2>
                     <div className="flex-1 h-px bg-slate-300"></div>
                   </div>
                   <p className="text-sm text-slate-600 leading-relaxed">
-                    {isSimplified ?
-                      '资深前端工程师，具备 5 年企业级 JavaScript 及 Vue 2/3 项目经验，熟悉 TypeScript（1–2 年），拥有 React 个人项目实践经历。专精于性能优化、组件化开发及多端适配（Web／移动端／小程序），能独立推进复杂功能开发，并于远程协作环境中高效沟通与准时交付。' :
-                      '資深前端工程師，具備 5 年企業級 JavaScript 及 Vue 2/3 專案經驗，熟悉 TypeScript（1–2 年），擁有 React 個人專案實踐經歷。專精於效能優化、元件化開發及多端適配（Web／行動端／小程式），能獨立推進複雜功能開發，並於遠端協作環境中高效溝通與準時交付。'
-                    }
+                    {t.professionalSummaryText}
                   </p>
                 </div>
 
@@ -155,59 +154,38 @@ export default function App() {
                 <div className="mb-8">
                   <div className="flex items-center gap-3 mb-4">
                     <Award className="w-5 h-5 text-slate-700" />
-                    <h2 className="text-lg text-slate-800 uppercase tracking-wide">{isSimplified ? '技术栈' : '技術棧'}</h2>
+                    <h2 className="text-lg text-slate-800 uppercase tracking-wide">{t.technicalSkills}</h2>
                     <div className="flex-1 h-px bg-slate-300"></div>
                   </div>
                   {/* Increase vertical spacing so the block breathes more */}
                   <div className="grid grid-cols-1 gap-y-2 text-sm leading-relaxed">
                     <div className="py-1">
-                      <span className="text-slate-700 font-medium">{isSimplified ? '核心技能：' : '核心技能：'}</span>
-                      {isSimplified ?
-                        'JavaScript（5 年经验）、TypeScript（1–2 年）、Vue 2/3（专家级）、React（个人项目实践 1–2 年）、Vite' :
-                        'JavaScript（5 年經驗）、TypeScript（1–2 年）、Vue 2/3（專家級）、React（個人專案實踐 1–2 年）、Vite'
-                      }
+                      <span className="text-slate-700 font-medium">{t.coreSkills}</span>
+                      {t.coreSkillsText}
                     </div>
                     <div className="py-1">
-                      <span className="text-slate-700 font-medium">{isSimplified ? '样式与交互：' : '樣式與交互：'}</span>
-                      {isSimplified ?
-                        'CSS3、LESS／SCSS、响应式设计、可访问性、主题定制' :
-                        'CSS3、LESS／SCSS、響應式設計、可訪問性、主題定制'
-                      }
+                      <span className="text-slate-700 font-medium">{t.stylingSkills}</span>
+                      {t.stylingSkillsText}
                     </div>
                     <div className="py-1">
-                      <span className="text-slate-700 font-medium">{isSimplified ? '性能与工程化：' : '性能與工程化：'}</span>
-                      {isSimplified ?
-                        '代码分割、懒加载、组件库建设、移动端/PC端/小程序多端适配、熟悉 Vercel 自動化部署流程，能將 Git 與持續整合結合以提升上線效率。' :
-                        '程式碼分割、懶加載、元件庫建設、移動端/PC端/小程式多端適配、熟悉 Vercel 自動化部署流程，能將 Git 與持續整合結合以提升上線效率。'
-                      }
+                      <span className="text-slate-700 font-medium">{t.performanceSkills}</span>
+                      {t.performanceSkillsText}
                     </div>
                     <div className="py-1">
-                      <span className="text-slate-700 font-medium">{isSimplified ? '可视化与工具：' : '可視化與工具：'}</span>
-                      {isSimplified ?
-                        'Echarts、Element-UI、GitHub Copilot' :
-                        'Echarts、Element-UI、GitHub Copilot'
-                      }
+                      <span className="text-slate-700 font-medium">{t.visualizationSkills}</span>
+                      {t.visualizationSkillsText}
                     </div>
                     <div className="py-1">
-                      <span className="text-slate-700 font-medium">{isSimplified ? '远程协作能力：' : '遠端協作能力：'}</span>
-                      {isSimplified ?
-                        '熟悉 Git 协作流程，能够高效完成跨时区远程前端开发任务' :
-                        '熟悉 Git 協作流程，能夠高效完成跨時區遠端前端開發任務'
-                      }
+                      <span className="text-slate-700 font-medium">{t.remoteSkills}</span>
+                      {t.remoteSkillsText}
                     </div>
                     <div className="py-1">
-                      <span className="text-slate-700 font-medium">{isSimplified ? '跨团队协作：' : '跨團隊協作：'}</span>
-                      {isSimplified ?
-                        '具备较强跨团队协作能力，能够推动前端规范与组件化建设' :
-                        '具備較強跨團隊協作能力，能夠推動前端規範與元件化建設'
-                      }
+                      <span className="text-slate-700 font-medium">{t.collaborationSkills}</span>
+                      {t.collaborationSkillsText}
                     </div>
                     <div className="py-1">
-                      <span className="text-slate-700 font-medium">{isSimplified ? '问题排查：' : '問題排查：'}</span>
-                      {isSimplified ?
-                        '熟悉生产环境排查与性能优化，能快速定位和解决问题' :
-                        '熟悉生產環境排查與效能優化，能快速定位和解決問題'
-                      }
+                      <span className="text-slate-700 font-medium">{t.troubleshootingSkills}</span>
+                      {t.troubleshootingSkillsText}
                     </div>
                   </div>
                 </div>
@@ -216,7 +194,7 @@ export default function App() {
                 <div className="mb-8">
                   <div className="flex items-center gap-3 mb-4">
                     <Briefcase className="w-5 h-5 text-slate-700" />
-                    <h2 className="text-lg text-slate-800 uppercase tracking-wide">{isSimplified ? '工作经历' : '工作經歷'}</h2>
+                    <h2 className="text-lg text-slate-800 uppercase tracking-wide">{t.workExperience}</h2>
                     <div className="flex-1 h-px bg-slate-300"></div>
                   </div>
 
@@ -226,15 +204,15 @@ export default function App() {
                       <div className="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-700 border-2 border-white"></div>
                       <div className="flex justify-between items-start mb-1">
                         <div>
-                          <div className="text-slate-800">{isSimplified ? '前端开发工程师' : '前端開發工程師'}</div>
-                          <div className="text-xs text-slate-500">{isSimplified ? '广东江夏生态建设有限公司' : '廣東江夏生態建設有限公司'}</div>
+                          <div className="text-slate-800">{t.frontendEngineer}</div>
+                          <div className="text-xs text-slate-500">{t.company1}</div>
                         </div>
-                        <div className="text-xs text-slate-500 whitespace-nowrap ml-4">2025.03 - 2025.05</div>
+                        <div className="text-xs text-slate-500 whitespace-nowrap ml-4">{t.experience1Period}</div>
                       </div>
                       <ul className="text-xs text-slate-600 space-y-1 mt-2">
-                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '维护并迭代小象城泊小程序与后台系统，负责关键功能交付，上线稳定率 >95%；实施代码分割与懒加载使首屏加载提升约30%。' : '維護並疊代小象城泊小程式與後台系統，負責關鍵功能交付，上線穩定率 >95%；實施程式碼分割與懶加載使首屏加載提升約30%。'}</span></li>
-                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '优化系统性能，通过引入Web Workers处理复杂计算，减少主线程阻塞，提升用户体验。' : '優化系統性能，通過引入Web Workers處理複雜計算，減少主線程阻塞，提升用戶體驗。'}</span></li>
-                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '与后端与后端团队紧密合作，设计并实现 RESTful API 接口，有效提升前后端数据交互的稳定性与高效性，成功减少系统错误率 25% 或加快数据传递速度 30%。' : '與後端團隊緊密合作，設計並實現 RESTful API 接口，有效提升前後端數據交互的穩定性與高效性，成功減少有效提升資料傳輸穩定性與速度（約 25–30%）。'}</span></li>
+                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.experience1Duty1}</span></li>
+                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.experience1Duty2}</span></li>
+                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.experience1Duty3}</span></li>
                       </ul>
                     </div>
 
@@ -243,14 +221,14 @@ export default function App() {
                       <div className="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-700 border-2 border-white"></div>
                       <div className="flex justify-between items-start mb-1">
                         <div>
-                          <div className="text-slate-800">{isSimplified ? '前端开发工程师' : '前端開發工程師'}</div>
-                          <div className="text-xs text-slate-500">{isSimplified ? '上海屹通信息科技发展有限公司' : '上海屹通信息科技發展有限公司'}</div>
+                          <div className="text-slate-800">{t.frontendEngineer}</div>
+                          <div className="text-xs text-slate-500">{t.company2}</div>
                         </div>
-                        <div className="text-xs text-slate-500 whitespace-nowrap ml-4">2022.04 - 2025.01</div>
+                        <div className="text-xs text-slate-500 whitespace-nowrap ml-4">{t.experience2Period}</div>
                       </div>
                       <ul className="text-xs text-slate-600 space-y-1 mt-2">
-                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '参与多个核心模块的功能开发与交付，通过兼容性修复与组件库规范化，使相关 bug 减少约 40%，开发效率提升约 25%。' : '參與多個核心模組的功能開發與交付，透過相容性修復與元件庫規範化，使相關 bug 減少約 40%，開發效率提升約 25%。'}</span></li>
-                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '设计并实现可重用的UI组件库，提高团队开发效率，减少重复代码约30%。' : '設計並實現可重用的UI組件庫，提高團隊開發效率，減少重複代碼約30%。'}</span></li>
+                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.experience2Duty1}</span></li>
+                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.experience2Duty2}</span></li>
                       </ul>
                     </div>
 
@@ -259,14 +237,14 @@ export default function App() {
                       <div className="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-700 border-2 border-white"></div>
                       <div className="flex justify-between items-start mb-1">
                         <div>
-                          <div className="text-slate-800">{isSimplified ? '前端开发工程师' : '前端開發工程師'}</div>
-                          <div className="text-xs text-slate-500">{isSimplified ? '华付信息' : '華付信息'}</div>
+                          <div className="text-slate-800">{t.frontendEngineer}</div>
+                          <div className="text-xs text-slate-500">{t.company3}</div>
                         </div>
-                        <div className="text-xs text-slate-500 whitespace-nowrap ml-4">2018.03 - 2022.02</div>
+                        <div className="text-xs text-slate-500 whitespace-nowrap ml-4">{t.experience3Period}</div>
                       </div>
                       <ul className="text-xs text-slate-600 space-y-1 mt-2">
-                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '负责企业级后台管理平台与权限系统的核心功能开发，通过前端模块化与代码规范，减少重复开发约 20%，提升系统可维护性与交付稳定性。' : '負責企業級後台管理平台與權限系統的核心功能開發，透過前端模組化與代碼規範，減少重複開發約 20%，提升系統可維護性與交付穩定性。'}</span></li>
-                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '参与前端开发流程与代码规范的优化，协助提升团队协作效率与代码一致性。' : '參與前端開發流程與代碼規範的優化，協助提升團隊協作效率與代碼一致性。'}</span></li>
+                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.experience3Duty1}</span></li>
+                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.experience3Duty2}</span></li>
                       </ul>
                     </div>
                   </div>
@@ -276,7 +254,7 @@ export default function App() {
               {/* Footer restored on page 1 */}
               <div className="mt-auto pt-4 border-t border-slate-200" style={{ paddingBottom: '16px' }}>
                 <p className="text-xs text-slate-400 text-center">
-                  {isSimplified ? '感谢您花时间审阅我的简历，期待与您进一步交流' : '感謝您花時間審閱我的簡歷，期待與您進一步交流'}
+                  {t.thanksMessage}
                 </p>
               </div>
             </div>
@@ -290,7 +268,7 @@ export default function App() {
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-4">
                 <Folder className="w-5 h-5 text-slate-700" />
-                <h2 className="text-lg text-slate-800 uppercase tracking-wide">{isSimplified ? '项目经验' : '專案經驗'}</h2>
+                <h2 className="text-lg text-slate-800 uppercase tracking-wide">{t.projectExperience}</h2>
                 <div className="flex-1 h-px bg-slate-300"></div>
               </div>
 
@@ -299,19 +277,16 @@ export default function App() {
                 <div className="relative pl-6 border-l-2 border-slate-300">
                   <div className="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-700 border-2 border-white"></div>
                   <div className="mb-1">
-                    <div className="text-slate-800">{isSimplified ? '东莞农商数字银行' : '東莞農商數位銀行'}</div>
+                    <div className="text-slate-800">{t.project1}</div>
                     <div className="text-xs text-slate-500 mt-0.5">Vue3 + Pinia + Vite + uni-app</div>
                   </div>
                   <p className="text-xs text-slate-600 leading-relaxed mb-1.5">
-                    {isSimplified ?
-                      '为银行业务员提供高效的业务办理通道，支持信用卡、数字卡、个人信息维护、借记卡、综合签约等多业务模块。' :
-                      '為銀行業務員提供高效的業務辦理通道，支援信用卡、數位卡、個人資訊維護、借記卡、綜合簽約等多業務模組。'
-                    }
+                    {t.project1Description}
                   </p>
                   <ul className="text-xs text-slate-600 space-y-0.5">
-                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '组件库设计提升开发效率' : '元件庫設計提升開發效率'}</span></li>
-                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '基于角色的权限体系，多端适配实现代码复用' : '基於角色的權限體系，多端適配實現程式碼複用'}</span></li>
-                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '性能优化提升30%业务效率' : '效能優化提升30%業務效率'}</span></li>
+                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project1Point1}</span></li>
+                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project1Point2}</span></li>
+                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project1Point3}</span></li>
                   </ul>
                 </div>
 
@@ -319,40 +294,34 @@ export default function App() {
                 <div className="relative pl-6 border-l-2 border-slate-300">
                   <div className="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-700 border-2 border-white"></div>
                   <div className="mb-1">
-                    <div className="text-slate-800">{isSimplified ? '腾讯设计云 Codesign' : '騰訊設計雲 Codesign'}</div>
-                    <div className="text-xs text-slate-500 mt-0.5">{isSimplified ? 'Vue 2、Vuex、Nuxt、Echarts' : 'Vue 2、Vuex、Nuxt、Echarts'}</div>
+                    <div className="text-slate-800">{t.project2}</div>
+                    <div className="text-xs text-slate-500 mt-0.5">{t.tencentProjectTech}</div>
                   </div>
                   <p className="text-xs text-slate-600 leading-relaxed mb-1.5">
-                    {isSimplified ?
-                      '類藍湖的設計協作平台，支援跨部門協作與權限控管。' :
-                      '類藍湖的設計協作平台，支援跨部門協作與權限控管。'
-                    }
+                    {t.project2Description}
                   </p>
                   <ul className="text-xs text-slate-600 space-y-0.5">
-                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '參與前端模組開發與互動優化，改善設計協作體驗' : '參與前端模組開發與互動優化，改善設計協作體驗'}</span></li>
-                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '實現多角色權限控制與設計稿註解功能，提升跨部門溝通效率' : '實現多角色權限控制與設計稿註解功能，提升跨部門溝通效率'}</span></li>
+                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project2Point1}</span></li>
+                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project2Point2}</span></li>
                   </ul>
-                  <p className="text-xs text-slate-500 mb-1.5">{isSimplified ? '🔗 线上展示：https://codesign.qq.com/' : '🔗 線上展示：https://codesign.qq.com/'}</p>
+                  <p className="text-xs text-slate-500 mb-1.5">{t.tencentProjectLink}</p>
                 </div>
 
                 {/* Project 3 */}
                 <div className="relative pl-6 border-l-2 border-slate-300">
                   <div className="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-700 border-2 border-white"></div>
                   <div className="mb-1">
-                    <div className="text-slate-800">portfolio-vue3-vite - {isSimplified ? '前端作品集' : '前端作品集'}</div>
+                    <div className="text-slate-800">{t.project3}</div>
                     <div className="text-xs text-slate-500 mt-0.5">Vue 3 + TypeScript + Vite + Pinia</div>
                   </div>
                   <p className="text-xs text-slate-600 leading-relaxed mb-1.5">
-                    {isSimplified ?
-                      '个人前端作品集项目，展示多个前端技术案例和交互效果。' :
-                      '個人前端作品集專案，展示多個前端技術案例和互動效果。'
-                    }
+                    {t.project3Description}
                   </p>
-                  <p className="text-xs text-slate-500 mb-1.5">{isSimplified ? '线上展示: http://bean.binballs.top/' : '線上展示: http://bean.binballs.top/'}</p>
-                  <p className="text-xs text-slate-500 mb-1.5">{isSimplified ? '代码: https://github.com/ooBean/portfolio-vue3-vite' : '程式碼: https://github.com/ooBean/portfolio-vue3-vite'}</p>
+                  <p className="text-xs text-slate-500 mb-1.5">{t.project3Link}</p>
+                  <p className="text-xs text-slate-500 mb-1.5">{t.project3Code}</p>
                   <ul className="text-xs text-slate-600 space-y-0.5">
-                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '现代前端技术栈，GPU加速动画，3D交互卡片' : '現代前端技術棧，GPU加速動畫，3D互動卡片'}</span></li>
-                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '完整国际化、响应式设计' : '完整國際化、響應式設計'}</span></li>
+                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project3Point1}</span></li>
+                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project3Point2}</span></li>
                   </ul>
                 </div>
 
@@ -360,20 +329,17 @@ export default function App() {
                 <div className="relative pl-6 border-l-2 border-slate-300">
                   <div className="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-700 border-2 border-white"></div>
                   <div className="mb-1">
-                    <div className="text-slate-800">SaladGo - React {isSimplified ? '移动端电商' : '移動端電商'}</div>
+                    <div className="text-slate-800">{t.project4}</div>
                     <div className="text-xs text-slate-500 mt-0.5">React + TypeScript + Redux Toolkit + Framer Motion</div>
                   </div>
                   <p className="text-xs text-slate-600 leading-relaxed mb-1.5">
-                    {isSimplified ?
-                      '移动端电商应用，实现完整的购物流程和用户交互体验。' :
-                      '移動端電商應用，實現完整的購物流程和使用者互動體驗。'
-                    }
+                    {t.project4Description}
                   </p>
-                  <p className="text-xs text-slate-500 mb-1.5">{isSimplified ? '线上展示: http://bean.binballs.top/salad-app/' : '線上展示: http://bean.binballs.top/salad-app/'}</p>
-                  <p className="text-xs text-slate-500 mb-1.5">{isSimplified ? '代码: https://github.com/ooBean/salad-app' : '程式碼: https://github.com/ooBean/salad-app'}</p>
+                  <p className="text-xs text-slate-500 mb-1.5">{t.project4Link}</p>
+                  <p className="text-xs text-slate-500 mb-1.5">{t.project4Code}</p>
                   <ul className="text-xs text-slate-600 space-y-0.5">
-                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? '现代化技术栈，响应式设计' : '現代化技術棧，響應式設計'}</span></li>
-                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{isSimplified ? 'Redux状态管理，流畅动画效果，完整电商流程' : 'Redux狀態管理，流暢動畫效果，完整電商流程'}</span></li>
+                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project4Point1}</span></li>
+                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project4Point2}</span></li>
                   </ul>
                 </div>
               </div>
@@ -383,17 +349,17 @@ export default function App() {
             <div className="mb-4">
               <div className="flex items-center gap-3 mb-4">
                 <GraduationCap className="w-5 h-5 text-slate-700" />
-                <h2 className="text-lg text-slate-800 uppercase tracking-wide">{isSimplified ? '教育背景' : '教育背景'}</h2>
+                <h2 className="text-lg text-slate-800 uppercase tracking-wide">{t.educationBackground}</h2>
                 <div className="flex-1 h-px bg-slate-300"></div>
               </div>
               <div className="relative pl-6 border-l-2 border-slate-300">
                 <div className="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-700 border-2 border-white"></div>
                 <div className="flex justify-between items-start">
                   <div>
-                    <div className="text-slate-800">{isSimplified ? '网络工程 - 全日制本科' : '網路工程 - 全日制本科'}</div>
-                    <div className="text-xs text-slate-500 mt-0.5">{isSimplified ? '江西工程学院' : '江西工程學院'}</div>
+                    <div className="text-slate-800">{t.bachelor}</div>
+                    <div className="text-xs text-slate-500 mt-0.5">{t.university}</div>
                   </div>
-                  <div className="text-xs text-slate-500 whitespace-nowrap ml-4">{isSimplified ? '2018年毕业' : '2018年畢業'}</div>
+                  <div className="text-xs text-slate-500 whitespace-nowrap ml-4">{t.graduated}</div>
                 </div>
               </div>
             </div>
@@ -402,25 +368,25 @@ export default function App() {
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-4">
                 <Award className="w-5 h-5 text-slate-700" />
-                <h2 className="text-lg text-slate-800 uppercase tracking-wide">{isSimplified ? '软技能与专业素养' : '軟技能與專業素養'}</h2>
+                <h2 className="text-lg text-slate-800 uppercase tracking-wide">{t.softSkills}</h2>
                 <div className="flex-1 h-px bg-slate-300"></div>
               </div>
               <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm">
                 <div>
-                  <div className="text-slate-700 mb-1">{isSimplified ? 'UI/UX 追求' : 'UI/UX 追求'}</div>
-                  <div className="text-xs text-slate-600">{isSimplified ? '对UI细节、可访问性和性能调优有敏锐感知' : '對UI細節、可訪問性和效能調優有敏銳感知'}</div>
+                  <div className="text-slate-700 mb-1">{t.uiUx}</div>
+                  <div className="text-xs text-slate-600">{t.uiUxDescription}</div>
                 </div>
                 <div>
-                  <div className="text-slate-700 mb-1">{isSimplified ? '团队协作' : '團隊協作'}</div>
-                  <div className="text-xs text-slate-600">{isSimplified ? '与设计和后端团队沟通顺畅，协作高效' : '與設計和後端團隊溝通順暢，協作高效'}</div>
+                  <div className="text-slate-700 mb-1">{t.teamCollaboration}</div>
+                  <div className="text-xs text-slate-600">{t.teamCollaborationDescription}</div>
                 </div>
                 <div>
-                  <div className="text-slate-700 mb-1">{isSimplified ? '代码品质' : '程式碼品質'}</div>
-                  <div className="text-xs text-slate-600">{isSimplified ? '热爱整洁代码，注重组件复用性' : '熱愛整潔程式碼，注重元件複用性'}</div>
+                  <div className="text-slate-700 mb-1">{t.codeQuality}</div>
+                  <div className="text-xs text-slate-600">{t.codeQualityDescription}</div>
                 </div>
                 <div>
-                  <div className="text-slate-700 mb-1">{isSimplified ? '远程协作' : '遠端協作'}</div>
-                  <div className="text-xs text-slate-600">{isSimplified ? '有海外/跨时区远程协作经验，熟悉 GitHub PR 流程、异步沟通与日常远程协作工具（Slack/Teams, Jira）' : '有海外/跨時區遠端協作經驗，熟悉 GitHub PR 流程、非同步溝通與日常遠端協作工具（Slack/Teams, Jira）'}</div>
+                  <div className="text-slate-700 mb-1">{t.remoteWork}</div>
+                  <div className="text-xs text-slate-600">{t.remoteWorkDescription}</div>
                 </div>
               </div>
             </div>
@@ -429,21 +395,21 @@ export default function App() {
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-4">
                 <Target className="w-5 h-5 text-slate-700" />
-                <h2 className="text-lg text-slate-800 uppercase tracking-wide">{isSimplified ? '薪资期望' : '薪資期望'}</h2>
+                <h2 className="text-lg text-slate-800 uppercase tracking-wide">{t.salaryExpectations}</h2>
                 <div className="flex-1 h-px bg-slate-300"></div>
               </div>
               <div className="grid grid-cols-3 gap-x-8 text-sm">
                 <div>
-                  <div className="text-slate-700 mb-1">{isSimplified ? '远程工作' : '遠端工作'}</div>
-                  <div className="text-xs text-slate-600">{isSimplified ? '接受市场水平薪资，可面议' : '接受市場水平薪資，可面議'}</div>
+                  <div className="text-slate-700 mb-1">{t.remoteWorkOption}</div>
+                  <div className="text-xs text-slate-600">{t.salaryRemoteWorkDescription}</div>
                 </div>
                 <div>
-                  <div className="text-slate-700 mb-1">{isSimplified ? '项目合作' : '專案合作'}</div>
-                  <div className="text-xs text-slate-600">{isSimplified ? '按项目计费，可提供详细报价' : '按專案計費，可提供詳細報價'}</div>
+                  <div className="text-slate-700 mb-1">{t.projectCooperation}</div>
+                  <div className="text-xs text-slate-600">{t.salaryProjectCooperationDescription}</div>
                 </div>
                 <div>
-                  <div className="text-slate-700 mb-1">{isSimplified ? '全职岗位' : '全職崗位'}</div>
-                  <div className="text-xs text-slate-600">{isSimplified ? '可协商' : '可協商'}</div>
+                  <div className="text-slate-700 mb-1">{t.fullTime}</div>
+                  <div className="text-xs text-slate-600">{t.salaryFullTimeDescription}</div>
                 </div>
               </div>
             </div>
@@ -451,7 +417,7 @@ export default function App() {
             {/* Footer */}
             <div className="mt-auto pt-4 border-t border-slate-200">
               <p className="text-xs text-slate-400 text-center">
-                {isSimplified ? '感谢您花时间审阅我的简历，期待与您进一步交流' : '感謝您花時間審閱我的簡歷，期待與您進一步交流'}
+                {t.thanksMessage}
               </p>
             </div>
           </div>
