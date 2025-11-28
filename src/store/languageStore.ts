@@ -9,27 +9,6 @@ interface LanguageState {
   toggleLanguage: () => void
 }
 
-export const useLanguageStore = create<LanguageState>()(
-  persist(
-    (set, get) => ({
-      language: 'zh-TW', // 默认繁体中文
-      setLanguage: (language) => set({ language }),
-      toggleLanguage: () => {
-        const current = get().language
-        const nextLanguage: Record<Language, Language> = {
-          'zh-TW': 'zh-CN',
-          'zh-CN': 'en',
-          'en': 'zh-TW'
-        }
-        set({ language: nextLanguage[current] })
-      }
-    }),
-    {
-      name: 'language-storage'
-    }
-  )
-)
-
 // 语言映射对象
 type LanguageTexts = {
   name: string;
@@ -195,7 +174,7 @@ export const languageMap: Record<Language, LanguageTexts> = {
     professionalSummaryText: '資深前端工程師，具備 5 年企業級 JavaScript 及 Vue 2/3 專案經驗，熟悉 TypeScript（1–2 年），擁有 React 個人專案實踐經歷。專精於效能優化、元件化開發及多端適配（Web／行動端／小程式），能獨立推進複雜功能開發，並於遠端協作環境中高效溝通與準時交付。',
     coreSkillsText: 'JavaScript（5 年經驗）、TypeScript（1–2 年）、Vue 2/3（專家級）、React（個人專案實踐 1–2 年）、Vite',
     stylingSkillsText: 'CSS3、LESS／SCSS、響應式設計、可訪問性、主題定制',
-    performanceSkillsText: '程式碼分割、懶加載、元件庫建設、移動端/PC端/小程式多端適配、熟悉 Vercel 自動化部署流程，能將 Git 與持續整合結合以提升上線效率。',
+    performanceSkillsText: '程式碼分割、懶加載、元件庫建設、多端適配、熟悉基於 Git 的 CI/CD 流程，能利用 Vercel 等平台實現前端專案的自動化構建與持續部署 (Continuous Deployment)。',
     visualizationSkillsText: 'Echarts、Element-UI、GitHub Copilot',
     remoteSkillsText: '熟悉 Git 協作流程，能夠高效完成跨時區遠端前端開發任務',
     collaborationSkillsText: '具備較強跨團隊協作能力，能夠推動前端規範與元件化建設',
@@ -203,7 +182,7 @@ export const languageMap: Record<Language, LanguageTexts> = {
     uiUxDescription: '注重使用者體驗與介面細節，追求高效、直觀的互動設計。',
     teamCollaborationDescription: '熟悉 Git Flow，遵循團隊規範，樂於分享，高效協作。',
     codeQualityDescription: '遵循 Airbnb 風格指南，注重程式碼可讀性與可維護性。',
-    remoteWorkDescription: '具備超過 3 年的遠端工作經驗，擅長非同步溝通與自我管理。',
+    remoteWorkDescription: '熟悉遠端協作流程與工具，擅長非同步溝通與自我管理。',
     salaryRemoteWorkDescription: '可接受全球範圍內的遠端工作機會。',
     salaryProjectCooperationDescription: '短期或長期的專案合作模式均可探討。',
     salaryFullTimeDescription: '期望一份能穩定貢獻價值的全職工作。',
@@ -283,7 +262,7 @@ export const languageMap: Record<Language, LanguageTexts> = {
     professionalSummaryText: '资深前端工程师，具备 5 年企业级 JavaScript 及 Vue 2/3 项目经验，熟悉 TypeScript（1–2 年），拥有 React 个人项目实践经历。专精于性能优化、组件化开发及多端适配（Web／移动端／小程序），能独立推进复杂功能开发，并于远程协作环境中高效沟通与准时交付。',
     coreSkillsText: 'JavaScript（5 年经验）、TypeScript（1–2 年）、Vue 2/3（专家级）、React（个人项目实践 1–2 年）、Vite',
     stylingSkillsText: 'CSS3、LESS／SCSS、响应式设计、可访问性、主题定制',
-    performanceSkillsText: '代码分割、懒加载、组件库建设、移动端/PC端/小程序多端适配、熟悉 Vercel 自動化部署流程，能將 Git 與持續整合結合以提升上线效率。',
+    performanceSkillsText: '代码分割、懒加载、组件库建设、多端适配、熟悉基于 Git 的 CI/CD 流程，能利用 Vercel 等平台实现前端项目的自动化构建与持续部署 (Continuous Deployment)。',
     visualizationSkillsText: 'Echarts、Element-UI、GitHub Copilot',
     remoteSkillsText: '熟悉 Git 协作流程，能够高效完成跨时区远程前端开发任务',
     collaborationSkillsText: '具备较强跨团队协作能力，能够推动前端规范与组件化建设',
@@ -291,7 +270,7 @@ export const languageMap: Record<Language, LanguageTexts> = {
     uiUxDescription: '注重用户体验与界面细节，追求高效、直观的交互设计。',
     teamCollaborationDescription: '熟悉 Git Flow，遵循团队规范，乐于分享，高效协作。',
     codeQualityDescription: '遵循 Airbnb 风格指南，注重代码可读性与可维护性。',
-    remoteWorkDescription: '具备超过 3 年的远程工作经验，擅长异步沟通与自我管理。',
+    remoteWorkDescription: '熟悉远程协作流程与工具，擅长异步沟通与自我管理。',
     salaryRemoteWorkDescription: '可接受全球范围内的远程工作机会。',
     salaryProjectCooperationDescription: '短期或长期的项目合作模式均可探讨。',
     salaryFullTimeDescription: '期望一份能稳定贡献价值的全职工作。',
@@ -365,13 +344,13 @@ export const languageMap: Record<Language, LanguageTexts> = {
     experience1Duty2: 'Optimized performance with Web Workers for complex calculations, reducing main thread blocking.',
     experience1Duty3: 'Collaborated with backend to design RESTful APIs, improving data stability and reducing system errors by 25%.',
     experience2Duty1: 'Participated in core module development, reducing bugs by 40% and improving efficiency by 25% through standardization.',
-    experience2Duty2: 'Designed and implemented reusable UI component libraries, improving team efficiency and reducing code duplication by 30%.',
-    experience3Duty1: 'Developed core features for enterprise backend platforms, reducing repetitive work by 20% through modularization.',
-    experience3Duty2: 'Helped optimize frontend development processes and code standards to improve team collaboration.',
+    experience2Duty2: 'Helped optimize frontend development processes and code standards to improve team collaboration.',
+    experience3Duty1: 'Responsible for the core functional development of enterprise-level backend management platforms and permission systems, reducing redundant development by approx. 20% and improving system maintainability and delivery stability through frontend modularization and code standards.',
+    experience3Duty2: 'Participated in optimizing the frontend development process and code specifications, helping to improve team collaboration efficiency and code consistency.',
     professionalSummaryText: 'Senior frontend engineer with 5 years of JS/Vue experience, proficient in TypeScript and React. Specialized in performance optimization, component development, and multi-platform adaptation. Experienced in remote collaboration and independent feature development.',
     coreSkillsText: 'JS (5 yrs), TS (1-2 yrs), Vue 2/3 (expert), React (practice 1-2 yrs), Vite',
     stylingSkillsText: 'CSS3, LESS/SCSS, Responsive Design, Accessibility, Theming',
-    performanceSkillsText: 'Code splitting, lazy loading, component libs, multi-platform adaptation, Vercel CI/CD.',
+    performanceSkillsText: 'Code splitting, lazy loading, component libs, multi-platform adaptation, CI/CD with Vercel (Git-based automated builds & Continuous Deployment).',
     visualizationSkillsText: 'Echarts, Element-UI, GitHub Copilot',
     remoteSkillsText: 'Git workflows, efficient cross-timezone remote development.',
     collaborationSkillsText: 'Strong cross-team collaboration, driving frontend standards.',
@@ -379,7 +358,7 @@ export const languageMap: Record<Language, LanguageTexts> = {
     uiUxDescription: 'Focus on intuitive and user-friendly UI/UX.',
     teamCollaborationDescription: 'Skilled in Git Flow and team collaboration.',
     codeQualityDescription: 'Clean, readable code (Airbnb style).',
-    remoteWorkDescription: '3+ years remote work, strong async communication.',
+    remoteWorkDescription: 'Familiar with remote collaboration tools and workflows, skilled in asynchronous communication and self-management.',
     salaryRemoteWorkDescription: 'Open to remote work.',
     salaryProjectCooperationDescription: 'Open to project-based work.',
     salaryFullTimeDescription: 'Seeking a full-time position.',
@@ -387,3 +366,24 @@ export const languageMap: Record<Language, LanguageTexts> = {
     tencentProjectLink: 'Online Demo: https://codesign.qq.com/sites/design'
   }
 }
+
+export const useLanguageStore = create<LanguageState>()(
+  persist(
+    (set, get) => ({
+      language: 'zh-TW', // 默认繁体中文
+      setLanguage: (language) => set({ language }),
+      toggleLanguage: () => {
+        const current = get().language
+        const nextLanguage: Record<Language, Language> = {
+          'zh-TW': 'zh-CN',
+          'zh-CN': 'en',
+          'en': 'zh-TW'
+        }
+        set({ language: nextLanguage[current] })
+      }
+    }),
+    {
+      name: 'language-storage'
+    }
+  )
+)
