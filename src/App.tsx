@@ -212,7 +212,6 @@ export default function App() {
                       <ul className="text-xs text-slate-600 space-y-1 mt-2">
                         <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.experience1Duty1}</span></li>
                         <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.experience1Duty2}</span></li>
-                        <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.experience1Duty3}</span></li>
                       </ul>
                     </div>
 
@@ -250,13 +249,6 @@ export default function App() {
                   </div>
                 </div>
               </div>
-
-              {/* Footer restored on page 1 */}
-              <div className="mt-auto pt-4 border-t border-slate-200" style={{ paddingBottom: '16px' }}>
-                <p className="text-xs text-slate-400 text-center">
-                  {t.thanksMessage}
-                </p>
-              </div>
             </div>
           </div>
         </div>
@@ -278,7 +270,7 @@ export default function App() {
                   <div className="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-700 border-2 border-white"></div>
                   <div className="mb-1">
                     <div className="text-slate-800">{t.project1}</div>
-                    <div className="text-xs text-slate-500 mt-0.5">Vue3 + Pinia + Vite + uni-app</div>
+                    <div className="text-xs text-slate-500 mt-0.5">Vue 2 + Webpack + uni-app</div>
                   </div>
                   <p className="text-xs text-slate-600 leading-relaxed mb-1.5">
                     {t.project1Description}
@@ -346,8 +338,8 @@ export default function App() {
             </div>
 
             {/* Education */}
-            <div className="mb-4">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-6">
                 <GraduationCap className="w-5 h-5 text-slate-700" />
                 <h2 className="text-lg text-slate-800 uppercase tracking-wide">{t.educationBackground}</h2>
                 <div className="flex-1 h-px bg-slate-300"></div>
@@ -415,8 +407,8 @@ export default function App() {
             </div>
 
             {/* Footer */}
-            <div className="mt-auto pt-4 border-t border-slate-200">
-              <p className="text-xs text-slate-400 text-center">
+            <div className="mt-auto py-6 border-t border-slate-200">
+              <p className="text-xs text-slate-400 text-center pt-4">
                 {t.thanksMessage}
               </p>
             </div>
