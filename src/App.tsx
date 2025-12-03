@@ -270,16 +270,18 @@ export default function App() {
                   <div className="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-700 border-2 border-white"></div>
                   <div className="mb-1">
                     <div className="text-slate-800">{t.project1}</div>
-                    <div className="text-xs text-slate-500 mt-0.5">Vue 2 + Webpack + uni-app</div>
+                    <div className="text-xs text-slate-500 mt-0.5">Vue 2 + Webpack</div>
                   </div>
                   <p className="text-xs text-slate-600 leading-relaxed mb-1.5">
                     {t.project1Description}
                   </p>
-                  <ul className="text-xs text-slate-600 space-y-0.5">
-                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project1Point1}</span></li>
-                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project1Point2}</span></li>
-                    <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project1Point3}</span></li>
-                  </ul>
+                  <div className="space-y-4">
+                    <ul className="text-xs space-y-2 list-inside text-slate-500 dark:text-slate-400">
+                      {t.project1Point1 && <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project1Point1}</span></li>}
+                      {t.project1Point2 && <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project1Point2}</span></li>}
+                      {t.project1Point3 && <li className="flex gap-2"><span className="text-slate-400">•</span><span>{t.project1Point3}</span></li>}
+                    </ul>
+                  </div>
                 </div>
 
                 {/* Project 2 */}
